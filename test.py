@@ -35,10 +35,20 @@ def send_message(chat_id, user_message):
     return response
 
 
+first_chat=generate_chat_id()
 
-chat_id = generate_chat_id()
+print("Response1 : ", send_message(first_chat, "What are the benefits of your product?"))
 
-print("Response:", send_message(chat_id, "I'm having trouble with my recent order. Can you help me track it?"))
-print("\nConversation History:")
-for message in chat_sessions[chat_id]:
-    print(f"- {message['role'].capitalize()}: {message['content']}")
+print("Response2 : ", send_message(first_chat, "Any other benefit?"))
+
+
+second_chat=generate_chat_id()
+
+print("Response1 : ", send_message(second_chat, "What are the cons of your product?"))
+
+print("Response2 : ", send_message(first_chat, "Do you have solutions for them?"))
+
+for s in chat_sessions:
+    print(f"Session id : {s}")
+    for m in chat_sessions[s]:
+        print(m["role"], ":", m["content"])

@@ -29,7 +29,7 @@ body {
 
 /* Style suggestion buttons with vibrant color and padding */
 .suggestion-btn {
-    background: #ff9800;
+    background: #06141B;
     color: #fff;
     padding: 8px 16px;
     border: none;
@@ -111,11 +111,15 @@ button{
     color:whit;
     border:none;
     cursor:pointer;
-    border-radius: 20%;
+    border-radius: 5px;
 }
 
+#send-btn{
+    background-color: #9BA8AB;
+}
 /* TODO: Style new session button with a specific green background color */
 #new-session-btn{
-    background-color:green;
-    border-radius: 20%;
+    background-color:#11212D;
+    color: white;
+    
 }

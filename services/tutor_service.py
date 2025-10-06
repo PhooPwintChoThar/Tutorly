@@ -49,7 +49,7 @@ class TutorService:
             response = self.client.chat.completions.create(
                 model="deepseek/deepseek-chat-v3.1:free",  # Fixed: OpenRouter model format
                 messages=conversation,
-                temperature=0.7,
+                temperature=0.5,
                 max_tokens=500
             )
             

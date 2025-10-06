@@ -6,7 +6,7 @@
 </head>
 <body>
     <div class="header">
-        <h1>Welcome to Your Personal Tutor</h1>
+        <h1>Welcome to Tutorly </h1>
         <p>Ask any question and receive personalized guidance!</p>
     </div>
         
@@ -31,7 +31,7 @@
             <div class="input-wrapper">
                 <input type="text" id="message-input" placeholder="Type your question...">
             </div>
-            <button onclick="sendQuery()">Send</button>
+            <button id ="send-btn" onclick="sendQuery()">Send</button>
             <button id="new-session-btn" onclick="startNewSession()">New Session</button>
         </div>
     </div>
@@ -93,7 +93,7 @@
                     appendMessage('assistant', 'Error: ' + data.error);
                     return;
                 }
-                cosole.log("response", data)
+                console.log("response", data)
                 appendMessage('assistant', data.response);
             })
             .catch(error => {

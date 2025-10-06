@@ -6,9 +6,21 @@ client = OpenAI(api_key="deepseek_api_key", base_url="https://api.deepseek.com")
 
 chat_sessions={}
 
+
+def read_system_prompt(file_path):
+    try:
+        
+        with open(file_path, 'r') as f:
+            return f.read()
+    except Exception as e:
+            print("Can't open the file because of ", e)
+            return " You are a good teacher assistant."
+        
+prompt=read_system_prompt('./system_prompt.txt')
+
 system_prompt = {
     "role": "system",
-    "content": "You are a friendly and efficient customer service attendant eager to assist customers with their inquiries and concerns."
+    "content": prompt
 }
 
 

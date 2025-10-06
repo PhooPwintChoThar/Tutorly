@@ -1,0 +1,91 @@
+/* Ensure html and body take full height using 100vh and have no margin or padding */
+html, body {
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+/* Set body as a flex container with a column layout and a modern font */
+body {
+    display: flex;
+    flex-direction: column;
+    font-family: Arial, sans-serif;
+}
+
+/* Style the header with center alignment, padding, and background color */
+.header {
+    text-align: center;
+    padding: 10px;
+    background-color: #f5f5f5;
+}
+
+/* Use flexbox to center suggestion buttons and add spacing */
+.suggestions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px;
+}
+
+/* Style suggestion buttons with vibrant color and padding */
+.suggestion-btn {
+    background: #ff9800;
+    color: #fff;
+    padding: 8px 16px;
+    border: none;
+    cursor: pointer;
+}
+
+/* TODO: Style chat container as a flex column, centered and responsive with no overflow */
+#chat-container{
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    max-width: 800px;
+    width: 100%;
+    align-items: center;
+    margin: 0 auto;
+    overflow:hidden;
+}
+/* - Set display to flex and flex-direction to column */
+/* - Use flex: 1 to allow it to grow and fill available space */
+/* - Set max-width to 800px and width to 100% for responsiveness */
+/* - Center the container with margin: 0 auto */
+/* - Ensure no overflow with overflow: hidden */
+
+/* TODO: Style messages area with border, padding, and scrollable overflow */
+/* - Use flex: 1 to allow it to grow and fill available space */
+#messages{
+    flex-grow: 1;
+    margin: 2;
+    padding: 2;
+    border: 1px solid wheat;
+    overflow-y: auto;
+}
+/* - Add margin and padding for spacing */
+/* - Add a border for visual separation */
+/* - Enable vertical scrolling with overflow-y: auto */
+
+/* TODO: Add spacing and padding to individual messages */
+.message{
+    margin:5;
+    padding: 2;;
+}
+/* - Add margin for spacing between messages */
+/* - Add padding for a comfortable reading area */
+
+/* TODO: Align user messages to the right */
+.user{
+    text-align: right;
+    background-color: greenyellow;
+    color : white;
+}
+/* - Use text-align: right for right alignment */
+
+/* TODO: Align assistant messages to the left */
+.assistant{
+    text-align: left;
+    background-color: orangered;
+    color: azure;
+}
+/* - Use text-align: left for left alignment */

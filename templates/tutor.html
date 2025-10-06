@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Your Personal Tutor</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/style.css') }}">
+</head>
+<body>
+    <div class="header">
+        <h1>Welcome to Your Personal Tutor</h1>
+        <p>Ask any question and receive personalized guidance!</p>
+    </div>
+        
+    <div class="suggestions">
+        <button class="suggestion-btn" onclick="usePrompt('I need help understanding a difficult concept. Could you guide me through it step-by-step?')">Explain a Concept</button>
+        <button class="suggestion-btn" onclick="usePrompt('Could you help me practice this topic with some sample questions?')">Practice Exercises</button>
+        <button class="suggestion-btn" onclick="usePrompt('I need to prepare for a test on this subject. What should I focus on?')">Study Strategy</button>
+    </div>
+
+    <div id="chat-container">
+        <div id="messages"></div>
+        <div class="input-container">
+            <div class="input-wrapper">
+                <input type="text" id="message-input" placeholder="Type your question...">
+            </div>
+            <button onclick="sendQuery()">Send</button>
+            <button id="new-session-btn" onclick="startNewSession()">New Session</button>
+        </div>
+    </div>
+
+    <script>
+        const messagesContainer = document.getElementById('messages');
+        const messageInput = document.getElementById('message-input');
+        let currentSessionId = null;
+        let currentStudentId = null;
+
+        document.addEventListener('DOMContentLoaded', startNewSession);
+
+        function startNewSession() {
+            fetch('/api/create_session', {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                currentSessionId = data.session_id;
+                currentStudentId = data.student_id;
+                messagesContainer.innerHTML = '';
+            })
+            .catch(() => {
+                alert('Error creating tutoring session');
+            });
+        }
+
+        function sendQuery() {
+            const query = messageInput.value.trim();
+            if (!query) return;
+
+            appendMessage('user', query);
+            messageInput.value = '';
+
+            fetch('/api/send_query', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    student_id: currentStudentId,
+                    session_id: currentSessionId,
+                    query: query
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                appendMessage('assistant', data.response);
+            })
+            .catch(() => {
+                alert('Error sending query');
+            });
+        }
+
+        function usePrompt(prompt) {
+            messageInput.value = prompt;
+            sendQuery();
+        }
+
+        function appendMessage(role, content) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${role}`;
+            messageDiv.textContent = content;
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        messageInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendQuery();
+            }
+        });
+    </script>
+</body>
+</html>

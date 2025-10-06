@@ -1,63 +1,53 @@
-from services.tutor_service import TutorService
-
-
-tutor_service = TutorService()
-
-
-student_id = "student123"
-
-
-session_id = tutor_service.create_session(student_id)
-print(f"Tutoring session created with ID: {session_id}")
+from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
+from starlette.middleware.sessions import SessionMiddleware
 from controllers.tutor_controller import TutorController
+import uvicorn
 
-# Initialize the TutorController
+# Initialize FastAPI app
+app = FastAPI()
+
+# Add session middleware
+app.add_middleware(
+    SessionMiddleware,
+    secret_key="your_secret_key_here", 
+    same_site="none",
+    https_only=True,
+)
+
+# Mount static files directory
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+# Setup templates
+templates = Jinja2Templates(directory="templates")
+
+# Create controller instance
 tutor_controller = TutorController()
 
-# Ensure a student session for testing
-student_id = tutor_controller.ensure_student_session()
 
-# Create a new tutoring session
-session_response = tutor_controller.create_session()
-
-# Handle session creation response
-if 'error' in session_response:
-    print(f"Error: {session_response['error']}")
-else:
-    # Extract session_id from the response
-    session_id = session_response['session_id']
-    
-    # Example query handling
-    student_query = "Can you explain the concept of inheritance in programming?"
-
-    # TODO: Send the student query and get the response
-    reply=tutor_controller.send_query(session_id, student_query)
-
-    # TODO: Check if there is an error in the response
-        # TODO: If there is an error, print the error message
-    if isinstance(reply, tuple):
-        print(reply[0].get('error')+" occured")
-    # TODO: If there is no error, print the tutor's response
-    else:
-        print(reply.get('response'))
-student_query = "In what year Rome burned down?"
-print(f"Student Query: {student_query}")
-
-try:
-    ai_response = tutor_service.process_query(student_id, session_id, student_query)
-    print(f"AI Response: {ai_response}")
-except Exception as e:
-    print(f"Error: {e}")
+@app.get("/", response_class=HTMLResponse)
+async def index(request: Request):
+    tutor_controller.ensure_user_session(request.session)
+    return templates.TemplateResponse("tutor.html", {"request": request})
 
 
+@app.post("/api/create_session")
+async def create_session(request: Request):
+    return tutor_controller.create_session(request.session)
 
-session2=tutor_service.create_session(student_id)
 
-query2="In what year Korean became modern?"
-print(f"session 2 Query: {query2}")
+@app.post("/api/send_query")
+async def send_query(request: Request):
+    data = await request.json()
+    return tutor_controller.send_query(request.session, data)
 
-try:
-    reply=tutor_service.process_query(student_id, session2, query2)
-    print(f"session 2 reply: {reply}")
-except Exception as e:
-    print(f"Error: {e}")
+# Run the server
+if __name__ == "__main__":
+    uvicorn.run(
+        "main:app",
+        host="0.0.0.0",
+        port=3000,
+        reload=True
+    )

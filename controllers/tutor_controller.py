@@ -5,45 +5,41 @@ from services.tutor_service import TutorService
 class TutorController:
     def __init__(self):
         self.tutor_service = TutorService()
-        self.test_session = {}
-
-    def ensure_student_session(self):
-        """Ensure student has a session ID in the test session."""
-        if 'student_id' not in self.test_session:
-            self.test_session['student_id'] = str(uuid.uuid4())
-        return self.test_session['student_id']
     
-    def create_session(self):
+    def ensure_user_session(self, session):
+        """Ensure user has a session ID."""
+        if 'user_id' not in session:
+            session['user_id'] = str(uuid.uuid4())
+        return session['user_id']
+    
+    def create_session(self, session):
         """Handle tutoring session creation request."""
-        student_id = self.test_session.get('student_id')
-        if not student_id:
+        user_id = session.get('user_id')
+        if not user_id:
             return {'error': 'Session expired'}, 401
         
-        session_id = self.tutor_service.create_session(student_id)
+        session_id = self.tutor_service.create_session(user_id)
         return {
             'session_id': session_id,
             'message': 'Tutoring session created successfully'
         }
     
- 
-    def send_query(self, session_id, student_query):
-        
-        student_id = self.test_session.get('student_id')
-        if not student_id:
+    def send_query(self, session, data):
+        """Handle query sending request."""
+        user_id = session.get('user_id')
+        if not user_id:
             return {'error': 'Session expired'}, 401
-    
-        if not session_id or not student_query:
-            return {'error': 'invalid student_id or query'}, 400
+        
+        session_id = data.get('session_id')
+        user_query = data.get('query')
+        
+        if not session_id or not user_query:
+            return {'error': 'Missing session_id or query'}, 400
             
         try:
-        
-            response=self.tutor_service.process_query(student_id, session_id, student_query)
-            return {
-            'response': response,
-            'message': ' response processed successfully'
-        }
-        except Exception as e:
-            return {'error': e}, 500
-            
-            
-        
+            tutor_response = self.tutor_service.process_query(user_id, session_id, user_query)
+            return {'response': tutor_response}
+        except ValueError as e:
+            return {'error': str(e)}, 404
+        except RuntimeError as e:
+            return {'error': str(e)}, 500

@@ -6,7 +6,16 @@ from models.session import SessionManager
 class TutorService:
     def __init__(self):
         self.session_manager = SessionManager()
-        self.client = OpenAI(api_key="deepseek_api_key", base_url="https://api.deepseek.com")
+        # Fixed: OpenRouter configuration
+        self.client = OpenAI(
+            api_key="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"
+, 
+            base_url="https://openrouter.ai/api/v1",
+            default_headers={
+                "HTTP-Referer": "http://localhost:3000",  # Your site URL
+                "X-Title": "Personal Tutor App",  # Your app name
+            }
+        )
         self.system_prompt = self.load_system_prompt('data/system_prompt.txt')
 
     def load_system_prompt(self, file_path: str) -> str:
@@ -38,7 +47,7 @@ class TutorService:
             conversation = self.session_manager.get_conversation(student_id, session_id)
             
             response = self.client.chat.completions.create(
-                model="deepseek-ai/deepseek-V3",
+                model="deepseek/deepseek-chat-v3.1:free",  # Fixed: OpenRouter model format
                 messages=conversation,
                 temperature=0.7,
                 max_tokens=500

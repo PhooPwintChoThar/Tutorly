@@ -13,8 +13,8 @@ app = FastAPI()
 app.add_middleware(
     SessionMiddleware,
     secret_key="your_secret_key_here", 
-    same_site="none",
-    https_only=True,
+    same_site="lax",  # Change from "none"
+    https_only=False, 
 )
 
 # Mount static files directory
@@ -35,6 +35,7 @@ async def index(request: Request):
 
 @app.post("/api/create_session")
 async def create_session(request: Request):
+    tutor_controller.ensure_user_session(request.session) 
     return tutor_controller.create_session(request.session)
 
 

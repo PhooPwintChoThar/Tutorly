@@ -10,11 +10,20 @@
         <p>Ask any question and receive personalized guidance!</p>
     </div>
         
-    <div class="suggestions">
-        <button class="suggestion-btn" onclick="usePrompt('I need help understanding a difficult concept. Could you guide me through it step-by-step?')">Explain a Concept</button>
-        <button class="suggestion-btn" onclick="usePrompt('Could you help me practice this topic with some sample questions?')">Practice Exercises</button>
-        <button class="suggestion-btn" onclick="usePrompt('I need to prepare for a test on this subject. What should I focus on?')">Study Strategy</button>
-    </div>
+   <div class="suggestions">
+  <button class="suggestion-btn" onclick="usePrompt('Can you explain this topic in simple terms with examples?')">
+    Simplify a Topic
+  </button>
+
+  <button class="suggestion-btn" onclick="usePrompt('Give me a few practice problems to test my understanding.')">
+    Practice Problems
+  </button>
+
+  <button class="suggestion-btn" onclick="usePrompt('Summarize the key points I need to remember for my exam.')">
+    Quick Revision
+  </button>
+</div>
+
 
     <div id="chat-container">
         <div id="messages"></div>
@@ -31,21 +40,26 @@
         const messagesContainer = document.getElementById('messages');
         const messageInput = document.getElementById('message-input');
         let currentSessionId = null;
-        let currentStudentId = null;
 
         document.addEventListener('DOMContentLoaded', startNewSession);
 
         function startNewSession() {
             fetch('/api/create_session', {
-                method: 'POST'
+                method: 'POST',
+                credentials: 'same-origin'  // Include session cookies
             })
             .then(response => response.json())
             .then(data => {
+                if (data.error) {
+                    alert('Error: ' + data.error);
+                    return;
+                }
                 currentSessionId = data.session_id;
-                currentStudentId = data.student_id;
                 messagesContainer.innerHTML = '';
+                console.log('Session created:', currentSessionId);
             })
-            .catch(() => {
+            .catch(error => {
+                console.error('Error creating session:', error);
                 alert('Error creating tutoring session');
             });
         }
@@ -53,27 +67,38 @@
         function sendQuery() {
             const query = messageInput.value.trim();
             if (!query) return;
+            
+            if (!currentSessionId) {
+                alert('Please wait for session to be created');
+                return;
+            }
 
             appendMessage('user', query);
             messageInput.value = '';
 
             fetch('/api/send_query', {
                 method: 'POST',
+                credentials: 'same-origin',  // Include session cookies
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    student_id: currentStudentId,
                     session_id: currentSessionId,
                     query: query
                 })
             })
             .then(response => response.json())
             .then(data => {
+                if (data.error) {
+                    appendMessage('assistant', 'Error: ' + data.error);
+                    return;
+                }
+                cosole.log("response", data)
                 appendMessage('assistant', data.response);
             })
-            .catch(() => {
-                alert('Error sending query');
+            .catch(error => {
+                console.error('Error sending query:', error);
+                appendMessage('assistant', 'Error sending query. Please try again.');
             });
         }
 

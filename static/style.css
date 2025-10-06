@@ -59,17 +59,30 @@ body {
 /* Add spacing and padding to individual messages */
 .message {
     margin: 10px 0;
-    padding: 8px;
+    padding: 12px 16px;
+    border-radius: 18px;
+    max-width: 70%;
+    word-wrap: break-word;
+    line-height: 1.4;
 }
 
 /* Align user messages to the right */
 .user {
-    text-align: right;
+    margin-left: auto;
+    margin-right: 0;
+    background: linear-gradient(135deg, #4A5C6A 0%, #253745 100%);
+    color: #CCD0CF;
+    border-bottom-right-radius: 4px;
+    box-shadow: 0 2px 8px rgba(6, 20, 27, 0.3);
 }
-
 /* Align assistant messages to the left */
 .assistant {
-    text-align: left;
+    margin-right: auto;
+    margin-left: 0;
+    background: linear-gradient(135deg, #9BA8AB 0%, #CCD0CF 100%);
+    color: #06141B;
+    border-bottom-left-radius: 4px;
+    box-shadow: 0 2px 8px rgba(6, 20, 27, 0.2);
 }
 
 /* TODO: Use flexbox for input container with spacing and margin */
@@ -98,9 +111,11 @@ button{
     color:whit;
     border:none;
     cursor:pointer;
+    border-radius: 20%;
 }
 
 /* TODO: Style new session button with a specific green background color */
 #new-session-btn{
     background-color:green;
+    border-radius: 20%;
 }

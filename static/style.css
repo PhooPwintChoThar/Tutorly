@@ -1,6 +1,6 @@
- * {
-            box-sizing: border-box;
-        }
+* {
+    box-sizing: border-box;
+}
 
 html, body {
     height: 100vh;
@@ -263,7 +263,7 @@ button:active {
     transform: translateY(0);
 }
 
-/* Responsive Design */
+/* Responsive Design for Tablets */
 @media (max-width: 768px) {
     .header {
         padding: 20px 15px;
@@ -307,25 +307,67 @@ button:active {
     }
 }
 
+/* Responsive Design for Mobile */
 @media (max-width: 480px) {
+    .header {
+        padding: 15px 10px;
+    }
+
+    .header h1 {
+        font-size: 1.5rem;
+    }
+
+    .header p {
+        font-size: 0.85rem;
+    }
+
     .suggestions {
         flex-direction: column;
+        padding: 10px;
     }
 
     .suggestion-btn {
         width: 100%;
+        padding: 12px 20px;
+    }
+
+    #chat-container {
+        padding: 0 8px;
+    }
+
+    #messages {
+        margin: 8px 0;
+        padding: 12px;
+        border-radius: 10px;
+    }
+
+    .message {
+        max-width: 90%;
+        padding: 10px 14px;
+        font-size: 0.9rem;
     }
 
     .input-container {
         flex-wrap: wrap;
+        padding: 8px;
+        gap: 6px;
+    }
+
+    #message-input {
+        padding: 10px 12px;
+        font-size: 0.9rem;
     }
 
     button {
         flex: 1;
         min-width: 120px;
+        padding: 10px 14px;
+        font-size: 0.85rem;
     }
 
-    .message {
-        max-width: 90%;
+    #send-btn,
+    #new-session-btn {
+        width: 100%;
+        margin-top: 5px;
     }
 }

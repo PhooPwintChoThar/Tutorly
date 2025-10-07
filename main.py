@@ -6,7 +6,7 @@ from starlette.middleware.sessions import SessionMiddleware
 from controllers.tutor_controller import TutorController
 import uvicorn
 
-# Initialize FastAPI app
+
 app = FastAPI()
 
 # Add session middleware

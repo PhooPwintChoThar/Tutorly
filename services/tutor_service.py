@@ -7,9 +7,9 @@ class TutorService:
     def __init__(self):
         self.session_manager = SessionManager()
         self.client = OpenAI(
-            api_key="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"
+            api_key="Your API KEY"
 , 
-            base_url="https://openrouter.ai/api/v1",
+            base_url="AI MODEL",
             default_headers={
                 "HTTP-Referer": "http://localhost:3000",  
                 "Tutorly": "Your DSA Tutor", 
